@@ -1,0 +1,4 @@
+required_topics: [/EgoVehicleStatus, /ObjectStatus, /imu/data, /tf, /clock]
+wait_for_topics_sec: 10.0
+alive_hz: 1.0
+timeout_sec: 20.0

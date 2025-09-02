@@ -1,0 +1,24 @@
+<launch>
+    <arg name="ns" default="morai"/>
+    <arg name="global_yaml" default="$(find morai_common)/config/global.yaml"/>
+    <arg name="use_sim_time" default="true"/>
+    <arg name="enable_metrics" default="true"/>
+
+    <rosparam command ="load" file="$(arg global_yaml)" />
+
+    <group ns="$(arg ns)">
+        <param name="use_sim_time" value="$(arg use_sim_time)"/>
+
+        <node pkg="morai_common" type="required_topics_gaurd" name="gaurd" output="screen">
+            <rosparam param="required_topics">[/EgoVihicleStatus, /ObjectStatus, /imu/data, /clock, /tf]</rosparam>
+            <param name="wait_for_topics" value="$(eval rosparam.get('/morai_common/wait_for_topics_sec', 10.0)"/>
+        </node>
+
+        <include file="$(find morai_bridge)/launch/bridge_min.launch"/>
+
+        <group if="$(arg enable_metrics)">
+            <include file="$(find morai_tools)/launch/metrics.launch"/>
+            <include file="$(find morai_tools)/launch/bag_recorder.launch"/>
+        </group>
+    </group>
+</launch>

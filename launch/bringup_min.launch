@@ -1,0 +1,14 @@
+<launch>
+    <arg name="ns" default="morai"/>
+    <arg name="global_yaml" default="$(find morai_common)/config/global.yaml"/>
+    
+    <rosparam command="load" file="$(arg global_yaml)" />
+
+    <group ns="$(arg ns)">
+        <node pkg="morai_common" type="required_topics_gaurd" name="gaurd" output="screen">
+            <rosparam command="load" file="$(find morai_bringup)/config/bringup_node.yaml" ns="~" subst_value="true"/>
+        </node>
+
+        <include file="$(find morai_bridge)/launch/bridge_min.launch"/>
+    </group>
+</launch>
